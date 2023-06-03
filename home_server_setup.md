@@ -55,11 +55,11 @@ Now you can probably successfully run `sudo gem install rails` YMMV (It's a roll
 
 ### Reverse proxy setup
 First things first, you're going to need to configure your http and https ports in your router's port forwarding menu. You probably already know how to do this but if you don't, there should be a million different videos online on how to do that.
-For me I just added two seperate entries. One for http and one for https. You need to know servers local ip address and port ranges (port 80 for http and 443 for https). It doesn't really matter what port you choose as long as it matches with your nginx config and is unused by other processes on the server.
+For me I just added two seperate entries. One for http and one for https. You need to know the server's local ip address and port ranges (port 80 for http and 443 for https). It doesn't really matter what port you choose as long as it matches with your nginx config and is unused by other processes on the server.
 
-To let certbot do the heavy lifting for you, you first need a basic reverse proxy setup. Probably easiest to get http working then tackle https
+To let certbot do the heavy lifting for you, you first need a basic reverse proxy setup. Probably easiest to get http working **then** tackle https.
 
-This should get ya going, don't sweat the details in this as all of it will change once we tackle https. Annoyingly certbot needs a working nginx proxy to kick off it's what-have-yous.
+This should get ya going, don't sweat the details in this... It will all change once we tackle https in a few. Annoyingly certbot needs a working nginx proxy to kick off it's what-have-yous.
 ```
 sudo vim /etc/nginx/sites-available/default
 ```
@@ -69,24 +69,21 @@ server {
     server_name your_domain.com;
 
     location / {
-        proxy_pass http://192.168.0.<servers_local_ip>:3000;  # Change the port number to whatever you start up the rails app with.
+        proxy_pass http://<servers_local_ip>:3000;  # Change the port number to whatever you start up the rails app with.
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
 }
 ```
-
 Double check there are no syntax errors
 ```
 sudo nginx -t
 ```
-
 Restart nginx
 ```
 sudo systemctl restart nginx
 ```
-
-If that checks out now is the time to go into your DNS records for whatever domain you want to use (if you want to use a domain name, you may be cool with just referencing the public ip address)
+If that checks out, meow is the time to go into your DNS records for whatever domain you want to use (if you want to use a domain name, you may be cool with just referencing the public ip address)
 
 Add an A name record. **NOTE** if you are using godaddy delete the parked A name record they default ya with.
 ![Screenshot 2023-06-03 at 12 38 00 PM](https://github.com/TheDread-Pirate-Roberts/random_stuff_I_will_forget/assets/60859971/951878e5-0f07-4e45-8a65-db2f059e922d)
@@ -109,19 +106,21 @@ sudo systemctl restart nginx
 It's likely this will get ya all the GET requests a human can dream of, but if you want full CRUD operations there is some built in security measures in Rails you need to address at the app level and nginx level.
 
 In your Rails app
-`sudo vim config/environments/production.rb`
+```
+sudo vim config/environments/production.rb
+```
 Uncomment the following
 ```
   # config.force_ssl = true
 ```
 Add the following
 ```
-config.action_controller.default_url_options = { protocol: 'https', host: '<Your DNS name that also matches your nginx settings>' }
+config.action_controller.default_url_options = { protocol: 'https', host: '<Your domain name that also matches your nginx settings>' }
 ```
 In the reverse proxy you need to add some headers (note the proxy_set_header lines in the location block)
 ```
 server {
-    server_name <Your domanin name>;
+    server_name <Your domain name>;
 
     location / {
         proxy_pass http://<server's local ip>:3000;
@@ -134,21 +133,21 @@ server {
     }
 
     listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/<Your domanin name>/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/<Your domanin name>/privkey.pem; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/<Your domain name>/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/<Your domain name>/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 
 }
 
 server {
-    if ($host = <Your domanin name>) {
+    if ($host = <Your domain name>) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
 
     listen 80;
-    server_name <Your domanin name>;
+    server_name <Your domain name>;
     return 404; # managed by Certbot
 
 }
