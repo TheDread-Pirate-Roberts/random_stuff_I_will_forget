@@ -245,7 +245,9 @@ Go into your routers settings and turn off any extra ports you have open. For me
 Use complex passwords (e.g., "P@ssw0rd!"): Brute forcing complex passwords takes a longgg time.
 
 8 characters: months to years.
+
 10 characters: centuries to millennia. (you dead)
+
 12 characters or more: billions of years or more. (Earth dead)
 
 **But DPR, what if they use a supercomputer?**
@@ -254,14 +256,20 @@ If we assume a supercomputer that can perform 2 trillion calculations per second
 
 Number of possible combinations for a 10-digit password with 80 possible characters: 80^10 = approximately 1.02 x 10^20. Cool?
 
-Take that and divide the total number of combinations by the computing power of the supercomputer:
+Take that and divide the total number of combinations by the computing power of the supercomputer
+
 (1.02 x 10^20) / (2 x 10^12) = 5.1 x 10^7 seconds. **AKA 1.6 years**
 
-If you double it and make it a 20 digit complex password and throw 2 teraflopys at it => 180 trillon years (Milkyway dead)
+If you double it and make it a 20 digit complex password and throw 2 teraflopys at it
+
+=> 180 trillon years (Milkyway dead)
 
 **But DPR, what if they use the Fugaku supercomputer?**
 
 Here is where stuff gets cool. Lets assume you have a 10 digit complex password and a 442 petaflop supercomputer wanted to get in.
+
 **6.42 HOURS**
 
-What about a 20 digit complex password? => 100 trillion years
+What about a 20 digit complex password?
+
+=> 100 trillion years
