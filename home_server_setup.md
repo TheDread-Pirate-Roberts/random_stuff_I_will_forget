@@ -193,7 +193,7 @@ TBD
 ## Security Measures
 The internet is a scary place. This is running on your home network where all your other beloved data frequents. Protect yo self fool
 
-#### Permit only authorized keys and disable password login for ssh 🙏**
+#### Permit only authorized keys and disable password login for ssh 🙏
 Copy your trusted public key (I use ed25519, YMMV but [probably make the switch](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent))
 ```
 ssh-copy-id -i ~/.ssh/id_ed25519.pub user@server_ip_address
@@ -240,3 +240,20 @@ sudo ufw enable
 ```
 #### Minimize attack surface area
 Go into your routers settings and turn off any extra ports you have open. For me I had my macbooks_local_ip:5001 open to test a caddy server. Hackers run port scans for fun. Don't give them anymore attack surface area.
+
+#### Make sure your network has a secure password
+Use complex passwords (e.g., "P@ssw0rd!"): Brute forcing complex passwords takes a longgg time.
+
+8 characters: months to years.
+10 characters: centuries to millennia. (you dead)
+12 characters or more: billions of years or more. (Earth dead)
+
+**But DPR, what if they use a super computer?**
+If we assume a supercomputer that can perform 2 trillion calculations per second & assume you lock it up with a 10-digit complex password that includes a combination of uppercase letters, lowercase letters, digits, and special characters.
+
+Number of possible combinations for a 10-digit password with 80 possible characters: 80^10 = approximately 1.02 x 10^20. Cool?
+
+Take that and divide the total number of combinations by the computing power of the supercomputer:
+(1.02 x 10^20) / (2 x 10^12) = 5.1 x 10^7 seconds. **AKA 1.6 years**
+
+If you double it and make it a 20 digit complex password and throw 2 teraflopys at it => 180 trillon years (Milkyway dead)
