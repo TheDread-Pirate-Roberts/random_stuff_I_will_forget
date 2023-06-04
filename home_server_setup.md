@@ -189,3 +189,54 @@ screen -r
 
 #### CI/CD
 TBD
+
+## Security Measures
+The internet is a scary place. This is running on your home network where all your other beloved data frequents. Protect yo self fool
+
+#### Permit only authorized keys and disable password login for ssh 🙏**
+Copy your trusted public key (I use ed25519, YMMV but [probably make the switch](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent))
+```
+ssh-copy-id -i ~/.ssh/id_ed25519.pub user@server_ip_address
+```
+ssh back into the server and notice you don't get prompted for a password? Cool
+```
+ssh user@server_ip_address
+```
+Now lets edit the ssh config to remove the password auth and allow authorized keys
+```
+sudo vim /etc/ssh/sshd_config
+```
+Find the line that says "PasswordAuthentication yes" and uncomment it and change it to "PasswordAuthentication no"
+
+Do the same for the line that says "PubkeyAuthentication no" and change it to "PubkeyAuthentication yes"
+
+Restart the ssh service
+```
+sudo service ssh restart
+```
+___
+#### Setup an uncomplicated firewall (the tool is literally called uncomplicated firewall - UFW)
+Check it's status
+```
+sudo ufw status
+```
+Allow incoming SSH connections to ensure you can access your server remotely.
+```
+sudo ufw allow OpenSSH
+```
+Probably just allow the ports open for the reverse proxy eh?
+```
+sudo ufw allow 80
+sudo ufw allow 443
+```
+We don't need ftp or telnet so turn em off
+```
+sudo ufw deny ftp
+sudo ufw deny telnet
+```
+If it wasn't enabled during the status check, go ahead and turn that sucker on!
+```
+sudo ufw enable
+```
+#### Minimize attack surface area
+Go into your routers settings and turn off any extra ports you have open. For me I had my macbooks_local_ip:5001 open to test a caddy server. Hackers run port scans for fun. Don't give them anymore attack surface area.
