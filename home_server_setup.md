@@ -23,7 +23,7 @@ Here's what I installed to run Ruby 3.2.2 & Rails 7. YMMV
 ```
 sudo apt update
 sudo apt upgrade
-sudo apt install build-essential libssl-dev libreadline-dev zlib1g-dev libsqlite3-dev libyaml-dev nginx certbot python3-certbot-nginx
+sudo apt install build-essential libssl-dev libreadline-dev zlib1g-dev libsqlite3-dev libyaml-dev nginx certbot python3-certbot-nginx git
 ```
 
 Install rbenv 
@@ -49,7 +49,7 @@ rbenv global <desired Ruby version>
 
 Install more packages FTW
 ```
-sudo apt install ruby-dev ruby-devel rubygems
+sudo apt install ruby-dev rubygems
 ```
 Now you can probably successfully run `sudo gem install rails` YMMV (It's a roll your own linux server after all)
 
