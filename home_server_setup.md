@@ -23,7 +23,7 @@ Here's what I installed to run Ruby 3.2.2 & Rails 7. YMMV
 ```
 sudo apt update
 sudo apt upgrade
-sudo apt install build-essential libssl-dev libreadline-dev zlib1g-dev libsqlite3-dev libyaml-dev nginx certbot python3-certbot-nginx git
+sudo apt install build-essential libssl-dev libreadline-dev zlib1g-dev libsqlite3-dev libyaml-dev nginx certbot python3-certbot-nginx git vim
 ```
 
 Install rbenv 
@@ -43,6 +43,7 @@ exec $SHELL
 
 Install Ruby
 ```
+source ~/.bashrc
 rbenv install <desired Ruby version>
 rbenv global <desired Ruby version>
 ```
@@ -53,9 +54,17 @@ sudo apt install ruby-dev rubygems
 ```
 Now you can probably successfully run `sudo gem install rails` YMMV (It's a roll your own linux server after all)
 
+Install PG
+```
+sudo apt-get install postgresql postgresql-contrib libpq-dev
+gem install foreman
+```
+
 ### Reverse proxy setup
-First things first, you're going to need to configure your http and https ports in your router's port forwarding menu. You probably already know how to do this but if you don't, there should be a million different videos online on how to do that.
+🚨🚨First things first🚨🚨, you're going to need to configure your http and https ports in your router's port forwarding menu. You probably already know how to do this but if you don't, there should be a million different videos online on how to do that.
 For me I just added two seperate entries. One for http and one for https. You need to know the server's local ip address and port ranges (port 80 for http and 443 for https). It doesn't really matter what port you choose as long as it matches with your nginx config and is unused by other processes on the server.
+
+ 👀 Note 👀 You can only really have 1 reverse proxy per internet plan you pay for. If you have more than 1 server in the house, just set the proxy_pass to your local IP address and the port number that app is running on and that should get ya going. 
 
 To let certbot do the heavy lifting for you, you first need a basic reverse proxy setup. Probably easiest to get http working **then** tackle https.
 
