@@ -3,15 +3,15 @@
 AWS is expensive. RPis are cheap. Linux is free. You probably already pay for the internet.
 
 ### Server setup
-If you are planning on using a RPi, do yourself a flavor and go ahead and download this their imager. https://www.raspberrypi.com/software/
+If you are planning on using an RPi, do yourself a flavor and go ahead and download their imager. https://www.raspberrypi.com/software/
 
-I choose the most recent Ubuntu server image and etched it onto a spare M.2 SSD I had laying around. You don't need to use a SD card anymore. Any bootable image via USB is good enough. I used the M.2 because it is way faster than any SD card I had laying around.
+I chose the most recent Ubuntu server image and etched it onto a spare M.2 SSD I had laying around. You don't need to use a SD card anymore. Any bootable image via USB is good enough. I used the M.2 because it is way faster than any SD card I had laying around.
 
 #### Considerations
-I'm just running a rails app and a reverse proxy on this thing and it's using 475Mb/4GB of RAM. So trying this with a pi zero is a waste of time IMHO.
+I'm just running a rails app and a reverse proxy on this thing, and it's using 475Mb/4GB of RAM. So trying this with a pi zero is a waste of time IMHO.
 
 ##### Stuff they don't tell you:
-When you first start up the ubuntu server it will ask for a username and password.
+When you first start up the Ubuntu server it will ask for a username and password.
 
 `username => ubuntu, password => ubuntu`
 
@@ -61,14 +61,14 @@ gem install foreman
 ```
 
 ### Reverse proxy setup
-🚨🚨First things first🚨🚨, you're going to need to configure your http and https ports in your router's port forwarding menu. You probably already know how to do this but if you don't, there should be a million different videos online on how to do that.
-For me I just added two seperate entries. One for http and one for https. You need to know the server's local ip address and port ranges (port 80 for http and 443 for https). It doesn't really matter what port you choose as long as it matches with your nginx config and is unused by other processes on the server.
+🚨🚨First things first🚨🚨, you're going to need to configure your http and https ports in your router's port forwarding menu. You probably already know how to do this, but if you don't, there should be a million different videos online on how to do that.
+As for me, I just added two seperate entries. One for http and one for https. You need to know the server's local ip address and port ranges (port 80 for http and 443 for https). It doesn't really matter what port you choose as long as it matches with your nginx config and is unused by other processes on the server.
 
  👀 Note 👀 You can only really have 1 reverse proxy per internet plan you pay for. If you have more than 1 server in the house, just set the proxy_pass to your local IP address and the port number that app is running on and that should get ya going. 
 
-To let certbot do the heavy lifting for you, you first need a basic reverse proxy setup. Probably easiest to get http working **then** tackle https.
+To let certbot do the heavy lifting for you, you first need a basic reverse proxy setup. Probably easiest to get http working, **then** tackle https.
 
-This should get ya going, don't sweat the details in this... It will all change once we tackle https in a few. Annoyingly certbot needs a working nginx proxy to kick off it's what-have-yous.
+This should get ya going, don't sweat the details in this... It will all change once we tackle https in a few. Annoyingly, certbot needs a working nginx proxy to kick off its what-have-yous.
 ```
 sudo vim /etc/nginx/sites-available/default
 ```
@@ -92,7 +92,7 @@ Restart nginx
 ```
 sudo systemctl restart nginx
 ```
-If that checks out, meow is the time to go into your DNS records for whatever domain you want to use (if you want to use a domain name, you may be cool with just referencing the public ip address)
+If that checks out, meow is the time to go into your DNS records for whatever domain you want to use (if you want to use a domain name, you may be cool with just referencing the public ip address).
 
 Add an A name record. **NOTE** if you are using godaddy delete the parked A name record they default ya with.
 ![Screenshot 2023-06-03 at 12 38 00 PM](https://github.com/TheDread-Pirate-Roberts/random_stuff_I_will_forget/assets/60859971/951878e5-0f07-4e45-8a65-db2f059e922d)
@@ -112,7 +112,7 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 #### YAY. You've got a reverse proxy setup for http and https with a valid cert that gets automatically updated via certbot 🤯
-It's likely this will get ya all the GET requests a human can dream of, but if you want full CRUD operations there is some built in security measures in Rails you need to address at the app level and nginx level.
+It's likely this will get ya all the GET requests a human can dream of, but if you want full CRUD operations, there is some built in security measures in Rails that you need to address at the app level and nginx level.
 
 In your Rails app
 ```
@@ -126,7 +126,7 @@ Add the following
 ```
 config.action_controller.default_url_options = { protocol: 'https', host: '<Your domain name that also matches your nginx settings>' }
 ```
-In the reverse proxy you need to add some headers (note the proxy_set_header lines in the location block)
+In the reverse proxy, you need to add some headers (note the proxy_set_header lines in the location block)
 ```
 server {
     server_name <Your domain name>;
@@ -200,7 +200,7 @@ screen -r
 TBD
 
 ## Security Measures
-The internet is a scary place. This is running on your home network where all your other beloved data frequents. Protect yo self fool
+The internet is a scary place. This is running on your home network where all your other beloved data frequents. Protect yo self fool!
 
 #### Permit only authorized keys and disable password login for ssh 🙏
 Copy your trusted public key (I use ed25519, YMMV but [probably make the switch](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent))
@@ -225,7 +225,7 @@ sudo service ssh restart
 ```
 ___
 #### Setup an uncomplicated firewall (the tool is literally called uncomplicated firewall - UFW)
-Check it's status
+Check its status
 ```
 sudo ufw status
 ```
@@ -238,7 +238,7 @@ Probably just allow the ports open for the reverse proxy eh?
 sudo ufw allow 80
 sudo ufw allow 443
 ```
-We don't need ftp or telnet so turn em off
+We don't need ftp or telnet, so turn em off
 ```
 sudo ufw deny ftp
 sudo ufw deny telnet
@@ -275,7 +275,7 @@ If you double it and make it a 20 digit complex password and throw 2 teraflopys 
 
 **But DPR, what if they use the Fugaku supercomputer?**
 
-Here is where stuff gets cool. Lets assume you have a 10 digit complex password and a 442 petaflop supercomputer wanted to get in.
+Here is where stuff gets cool. Let's assume you have a 10 digit complex password and a 442 petaflop supercomputer wanted to get in.
 
 **6.42 HOURS**
 
