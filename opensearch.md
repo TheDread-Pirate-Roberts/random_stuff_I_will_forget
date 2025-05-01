@@ -80,6 +80,18 @@ Make a directory for the drive: `sudo mkdir -p /mnt/opensearch-data`
 
 Then mount it! `sudo mount /dev/nvme0n1p2 /mnt/opensearch-data`
 
+If it doesn't mount you probably need to format it for linux.
+```
+sudo mkfs.ext4 /dev/nvme0n1p2
+systemctl daemon-reload
+sudo mount /dev/nvme0n1p2 /mnt/opensearch-data
+```
+
+Go ahead and make sure it persists across reboots run `sudo vim /etc/fstab` and add the following to it:
+```
+/dev/nvme0n1 /mnt/opensearch-data ext4 defaults 0 2
+```
+
 Set some file limits: `sudo vim /etc/security/limits.conf`
 ```
 opensearch soft nofile 65536
